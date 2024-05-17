@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% load capitalize_first %}
+{% include 'partials/_alerts.html' %}
+
+
+<div class="container-fluid py-4">
+  
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 ">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3  ">
+            <h6 class="text-white text-capitalize ps-3 ">({{products.count}})
+        
+            </h6>
+          </div>
+<!-- ######################################################### -->
+<form action="{% url 'search' %}" 
+novalidate onkeydown="if(event.keyCode === 13) { 
+                      
+  return false;}"> 
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="input-group input-group-outline my-3">
+        <label class="form-label">Barcode</label>
+        <input type="text" name="inputBarcode" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group input-group-outline my-3">
+        <label class="form-label">Name</label>
+        <input type="text" name="inputName" class="form-control" >
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="input-group input-group-outline my-3">
+        <label class="form-label">*Start Weight</label>
+        <input type="number" name="inputSWeight" class="form-control" step=".01" min="0" max="1000">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group input-group-outline my-3">
+        <label class="form-label">End Weight</label>
+        <input type="number" name="inputEWeight" class="form-control" step=".01" min="0" max="1000">
+      </div>
+    </div>
+  </div>
+
+ <div class="row">
+    <div class="col-md-6">
+      <div class="input-group input-group-outline my-3">
+        <label class="form-label">*Start Price</label>
+        <input type="number" name="inputSPrice" class="form-control" value="{{priceS}}">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group input-group-outline my-3">
+        <label class="form-label">End Price</label>
+        <input type="number" name="inputEPrice" class="form-control" value="{{priceE}}" >
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="row">
+    {% if request.user.username == 'admin' %}
+    <div class="col-md-2">
+      <div class="input-group input-group-outline  my-3">
+        <label for="form-label">Shop: </label>
+      <select name="inputShops" class="form-select  px-2 py-3" id="floatingSelect" aria-label="Floating label select example">
+        <option  selected>---</option>
+        {% if shop %}
+        <option  selected>{{shop.name}}-{{shop.address}}</option>
+        {% endif %}
+
+        {% for shop in shops %}
+        <option  value='{{shop.name}}-{{shop.address}}'>{{shop.name}}-{{shop.address}}</option>
+        {% endfor %}
+
+      </select>
+      </div>
+    </div>
+    {% else %}
+    <div class="col-md-2">
+      <div class="input-group input-group-outline  my-3">
+        <label for="form-label">Shop: </label>
+      <select name="inputShops" class="form-select  px-2 py-3" id="floatingSelect" aria-label="Floating label select example">
+        <option value="{{request.user.userprofile.shop.name}}-{{request.user.userprofile.shop.address}}"  selected >{{request.user.userprofile.shop.name}}-{{request.user.userprofile.shop.address}}</option>
+
+      </select>
+      </div>
+    </div>
+    {% endif %}
+    
+      <div class="col-md-2">
+        <div class="input-group input-group-outline  my-3">
+          <label for="form-label">Class: </label>
+        <select name="inputClass" class="form-select  px-2 py-3" id="floatingSelect" aria-label="Floating label select example">
+          <option  selected>---</option>
+          {% if clas %}
+          <option  selected>{{clas.name}}</option>
+          {% endif %}
+          {% for class in classes %}
+          
+          <option  value='{{class.name}}'>{{class.name}}</option>
+
+          {% endfor %}
+        </select>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="input-group input-group-outline  my-3">
+          <label for="form-label">Type: </label>
+        <select name="inputType" class="form-select  px-2 py-3" id="floatingSelect" aria-label="Floating label select example">
+          <option  selected>---</option>
+          {% if ty%}
+          <option  selected>{{ty.name}}</option>
+          {% endif %}
+          {% for type in types %}
+
+          <option  value='{{type.name}}'>{{type.name}}</option>
+
+          {% endfor %}
+        </select>
+        </div>
+      </div>
+  
+      <div class="col-md-2">
+        <div class="input-group input-group-outline  my-3">
+          <label for="form-label">Status: </label>
+        <select name="inputStatus" class="form-select  px-2 py-3" id="floatingSelect" aria-label="Floating label select example">
+          <option  selected>---</option>
+          {% if st %}
+          <option  selected>{{st.name}}</option>
+          {% endif %}
+          
+          {% for status in status %}
+          <option  value='{{status.name}}'>{{status.name}}</option>
+          {% endfor %}
+
+        </select>
+        </div>
+      </div>
+  
+
+ 
+      <div class="col-md-2">
+        <div class="input-group input-group-outline  my-3">
+          <label for="form-label">Staff: </label>
+        <select name="inputStaff" class="form-select  px-2 py-3" id="floatingSelect" aria-label="Floating label select example">
+          <option  selected>---</option>
+          {% if staff %}
+          <option  selected>{{staff}}</option>
+          {% endif %}
+          
+          {% for staff in staffs %}
+
+          <option  value='{{staff}}'>{{staff}}</option>
+
+          {% endfor %}
+        </select>
+        </div>
+      </div>
+
+
+  </div>
+
+
+  <div class="row">
+    
+    <div class="col-md-6">
+      <div class="input-group input-group-static my-3">
+        <label>Start Date</label>
+        <input type="date" name="inputSDate" class="form-control">
+      </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="input-group input-group-static my-3">
+          <label>End Date</label>
+          <input type="date" name="inputEDate" class="form-control">
+        </div>
+      </div>
+  </div>
+
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="cs" id="cs" >
+    <label class="custom-control-label" for="customCheck1">Case Sensitive</label>
+  </div>
+  <button class="btn btn-primary" type="submit">Search for All</button>
+</form>
+
+<!-- ######################################################### -->
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if products_list %}
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            {% if request.user.username == 'admin' %}
+            <h6 class="text-white text-capitalize ps-3 ">No24:({{no24}}) W24: ({{weight24}}) =>
+              {%for key, value in dict_details.items %}
+              
+              ({{key}}--{{value}}) 
+              {% endfor %}
+              , cash({{cash}})€
+            </h6>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+
+          <div class="table-responsive p-0">
+                          <!-- table2 -->
+                          <table class="table align-items-center mb-0 table-hover s">
+                            <thead>
+                              <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"># product</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Karat</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Weight</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sold Price €</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Employee</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Shop</th>
+                                
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Creation</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Seller</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sell</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for pro in products_list %}
+                              <tr>
+                                <td>
+                                  <div class="d-flex px-2 py-1">
+                                    <div>
+                                      <span class="text-xs font-weight-bold mb-0">{{forloop.counter}}-</span>
+                                      <a href="{% url 'product' pro_id=pro.id %}" target="_blank">
+                                      <img src="{{pro.image.url}}" class="avatar avatar-sm me-3 border-radius-lg photo_pros" alt="{{pro.name}}">
+                                    </a>
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center">
+                                      <a href="{% url 'product' pro_id=pro.id %}" target="_blank">
+                                      <h6 class="mb-0 text-sm">{{pro.name|capitalize_first}}</h6>
+                                      </a>
+                                      <p class="text-xs text-secondary mb-0">{{pro.barcode}}</p>
+                                     
+                                    </a>
+                                    </div>
+                                  </div>
+                                </td>
+              
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0"><h6>{{pro.classes.name}}</h6></p>
+                                </td>
+              
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0">{{pro.types.name}}</p>
+                                </td>
+              
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0"><h6>{{pro.weight}} G</h6></p>
+                                </td>
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0"><h6>{{pro.price_sold}} €</h6></p>
+                                </td>
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0">{{pro.user.username}}</p>
+                                  <p class="text-xs text-secondary mb-0">Organization</p>
+                                </td>
+              
+                                <td class="align-middle text-center text-sm">
+                                      {% if pro.status.name == 'available' %}
+                                      <span class="badge badge-sm bg-gradient-success">{{pro.status.name}}</span>
+                                      {% elif  pro.status.name == 'sold' %}
+                                      <span class="badge badge-sm bg-gradient-secondary">{{pro.status.name}}</span>
+                                      {% elif pro.status.name == 'block' %}
+                                      <span class="badge badge-sm bg-gradient-danger">{{pro.status.name}}</span>
+                                      {% elif pro.status.name == 'suspend' %}
+                                      <span class="badge badge-sm bg-gradient-warning">{{pro.status.name}}</span>
+                                      {% else %}
+                                      <span class="badge badge-sm bg-gradient-info">{{pro.status.name}}</span>
+                                      {% endif %}
+                                </td>
+              
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0">{{pro.shop.name}}</p>
+                                  <p class="text-xs text-secondary mb-0">{{pro.shop.address}}</p>
+                                </td>
+                                
+                                <td class="align-middle text-center">
+                                  <span class="text-secondary text-xs font-weight-bold">{{pro.creation_time|date:'d-m-Y'}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                  {% if pro.status.name == 'sold' %}
+                                  <a href="#" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{pro.seller}}">
+                                    <img src="{{pro.seller.userprofile.image.url}}" alt="{{pro.seller}}">
+                                  </a>
+                                {% else %}
+                                  <span class="text-secondary text-xs font-weight-bold">---</span>
+                                  {% endif %} 
+                                </td>
+                                <td class="align-middle text-center">
+                                  {% if pro.status.name == 'sold' %}
+                                  <span class="text-secondary text-xs font-weight-bold">{{pro.sell_time|date:'d-m-Y'}}</span>
+                                {% else %}
+                                  <span class="text-secondary text-xs font-weight-bold">---</span>
+                                  {% endif %} 
+                                </td>
+                                <td class="align-middle text-center">
+                                  {% if request.user.username == 'admin' %}
+                                  <a href="javascript:;" data-bs-toggle="tooltip" data-bs-original-title="Preview product">
+                                    <i class="material-icons text-secondary position-relative text-lg">visibility</i>
+                                    </a>
+                                    <a href="{% url 'product' pro_id=pro.id %}" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product" target="_blank">
+                                        <i class="material-icons text-secondary position-relative text-lg">drive_file_rename_outline</i>
+                                    </a>
+              
+              
+                                <button class="clickable-button btn btn-sm"
+                                    data-bs-toggle="modal" data-bs-target="#modal-notification" 
+                                    data-bs-original-title="Delete product"  
+                                    onclick="updateModal('{{pro.id}}')">
+                                    <i class="material-icons text-secondary position-relative text-lg">delete</i>
+                                </button>
+                                {% else %}
+                                  ---
+                                {% endif %}
+                                </td>
+
+                              </tr>
+                              {% empty %}
+                              <tr>
+                                <td class="align-middle text-center">
+                               <h4>No products yet...</h4>
+                                </td>
+                              </tr>
+                              
+                              {% endfor %}
+              
+                            </tbody>
+                          </table>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{%endif  %}
+
+</div>
+{% endblock %}

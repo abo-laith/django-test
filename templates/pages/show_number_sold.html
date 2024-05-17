@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_alerts.html' %}
+{% load capitalize_first %}
+
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            
+   
+              
+            <h6 class="text-white text-capitalize ps-3">NO: -  ({{products.count}}) W: ({{total_weight}}) {{unit}} 
+  
+            </h6>
+          </div>
+
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0 table-hover s">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"># product</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Karat</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Weight</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Employee</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Shop</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Creation</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pro in products_list %}
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div>
+                        <span class="text-xs font-weight-bold mb-0">{{forloop.counter}}-</span>
+                        <a href="{% url 'product' pro_id=pro.id %}">
+                        <img src="{{pro.image.url}}" class="avatar avatar-sm me-3 border-radius-lg photo_pros" alt="{{pro.name}}">
+                      </a>
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <a href="{% url 'product' pro_id=pro.id %}">
+                        <h6 class="mb-0 text-sm">{{pro.name|capitalize_first}}</h6>
+                        </a>
+                        <p class="text-xs text-secondary mb-0">{{pro.barcode}}</p>
+                       
+                      </a>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0"><h6>{{pro.classes.name}}</h6></p>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{pro.types.name}}</p>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0"><h6>{{pro.weight}} G</h6></p>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{pro.user.username}}</p>
+                    <p class="text-xs text-secondary mb-0">Organization</p>
+                  </td>
+
+                  <td class="align-middle text-center text-sm">
+                        {% if pro.status.name == 'available' %}
+                        <span class="badge badge-sm bg-gradient-success">{{pro.status.name}}</span>
+                        {% elif  pro.status.name == 'sold' %}
+                        <span class="badge badge-sm bg-gradient-secondary">{{pro.status.name}}</span>
+                        {% elif pro.status.name == 'block' %}
+                        <span class="badge badge-sm bg-gradient-danger">{{pro.status.name}}</span>
+                        {% elif pro.status.name == 'suspend' %}
+                        <span class="badge badge-sm bg-gradient-warning">{{pro.status.name}}</span>
+                        {% else %}
+                        <span class="badge badge-sm bg-gradient-info">{{pro.status.name}}</span>
+                        {% endif %}
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{pro.shop.name}}</p>
+                    <p class="text-xs text-secondary mb-0">{{pro.shop.address}}</p>
+                  </td>
+                  
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">{{pro.creation_time|date:'d-m-Y'}}</span>
+                  </td>
+                  <td class="align-middle text-center">
+                    <a href="javascript:;" data-bs-toggle="tooltip" data-bs-original-title="Preview product">
+                      <i class="material-icons text-secondary position-relative text-lg">visibility</i>
+                      </a>
+                      <a href="{% url 'product' pro_id=pro.id %}" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product">
+                          <i class="material-icons text-secondary position-relative text-lg">drive_file_rename_outline</i>
+                      </a>
+
+
+                  <button class="clickable-button btn btn-sm"
+                      data-bs-toggle="modal" data-bs-target="#modal-notification" 
+                      data-bs-original-title="Delete product"  
+                      onclick="updateModal('{{pro.id}}')">
+                      <i class="material-icons text-secondary position-relative text-lg">delete</i>
+                  </button>
+                  </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                  <td class="align-middle text-center">
+                 <h4>No products yet...</h4>
+                  </td>
+                </tr>
+                
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+<!-- pagination -->
+{% include 'partials/pagination.html' with page=products_list %}
+
+      </div>
+  </div>
+
+<!-- model Notification -->
+<div class="row">
+  <div class="col-md-4">
+      <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h6 class="modal-title font-weight-normal" id="modal-title-notification">Your attention is required</h6>
+              <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="py-3 text-center">
+                <i class="material-icons h1 text-secondary">
+                  Be Carefull
+                </i>
+                <h4 class="text-gradient text-danger mt-4">Do you want to Delete!</h4>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button> 
+              <a id="selectediteminfo" href="/products/remove/" type="button" class="btn bg-gradient-primary" >
+                  Remove
+                  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+
+    var selectedItemInfo=document.getElementById('selectediteminfo');
+    function updateModal(itemId){
+      selectedItemInfo.href+=itemId
+      console.log(selectedItemInfo.href);
+      console.log(itemId)   
+    }
+    
+    </script>
+
+{% endblock %}

@@ -1,0 +1,654 @@
+{% load static %}
+
+{% if  'signin' not in request.path and 'signup' not in request.path  %}
+
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
+    {% if request.user.username == 'admin' %}
+  <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+      <a class="navbar-brand m-0" href="{% url 'dashboard' %}" target="_blank">
+        <img src="{% static 'assets/img/logo-ct.png' %}" class="navbar-brand-img h-100" alt="main_logo">
+        <span class="ms-1 font-weight-bold text-white">JEWELRY DREAM</span>
+      </a>
+    </div>
+    {% endif %}
+    <hr class="horizontal light mt-0 mb-2">
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <!-- ############################### -->
+        {% if request.user.is_authenticated %}
+
+          <li class="nav-item mb-2 mt-0">
+            <a data-bs-toggle="collapse" href="#ProfileNav" class="nav-link text-white collapsed" aria-controls="ProfileNav" role="button" aria-expanded="false">
+            <img src="{{request.user.userprofile.image.url}}" class="avatar">
+            <span class="nav-link-text ms-2 ps-1">{{request.user.username|slice:10}}</span>
+            </a>
+            <div class="collapse" id="ProfileNav" style:"">
+            <ul class="nav ">
+            <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'profile' %}">
+            <span class="sidenav-mini-icon"> MP </span>
+            <span class="sidenav-normal  ms-3  ps-1"> My Profile </span>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link text-white " href="{% url 'logout' %}">
+            <span class="sidenav-mini-icon"> L </span>
+            <span class="sidenav-normal  ms-3  ps-1"> Logout </span>
+            </a>
+            </li>
+            </ul>
+            </div>
+          </li>
+          <hr class="horizontal light mt-0">
+          {% else %}
+          
+          {% endif %}
+        <!-- ################################ -->
+        {% if request.user.username == 'admin' %}
+        <li class="nav-item">
+          <a class="nav-link text-white active bg-gradient-primary" href="{% url 'dashboard' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">dashboard</i>
+            </div>
+            <span class="nav-link-text ms-1">Dashboard</span>
+          </a>
+        </li>
+        <!-- ##################applications################# -->
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#applicationsExamples" class="nav-link text-white collapsed" aria-controls="applicationsExamples" role="button" aria-expanded="false">
+          <i class="material-icons-round {% if page.brand == 'RTL' %}ms-2{% else %} me-2{% endif %}">apps</i>
+          <span class="nav-link-text ms-2 ps-1">Applications</span>
+          </a>
+          <div class="collapse" id="applicationsExamples" style:"">
+          <ul class="nav ">
+          <li class="nav-item ">
+          <a class="nav-link text-white " href="{% url 'shops' %}">
+          <span class="sidenav-mini-icon"> S </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Shops </span>
+          </a>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " href="{% url 'classes' %}">
+          <span class="sidenav-mini-icon"> C </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Classes </span>
+          </a>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " href="{% url 'types' %}">
+          <span class="sidenav-mini-icon"> T </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Types </span>
+          </a>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " href="{% url 'status' %}">
+          <span class="sidenav-mini-icon"> St </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Status </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+        <!-- ################products################### -->
+
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'products' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">table_view</i>
+            </div>
+            <span class="nav-link-text ms-1">Products</span>
+          </a>
+        </li>
+                <!-- ###############Sales#################### -->
+                <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#ecommerceExamples" class="nav-link text-white collapsed" aria-controls="ecommerceExamples" role="button" aria-expanded="false">
+                  <i class="material-icons-round {% if page.brand == 'RTL' %}ms-2{% else %} me-2{% endif %}">shopping_basket</i>
+                  <span class="nav-link-text ms-2 ps-1">Sales</span>
+                  </a>
+                  <div class="collapse" id="ecommerceExamples" style:"">
+                  <ul class="nav">
+                    <li class="nav-item ">
+                      <a class="nav-link text-white " href="{% url 'seller' %}">
+                      <span class="sidenav-mini-icon"> S </span>
+                      <span class="sidenav-normal  ms-2  ps-1"> Sell </span>
+                      </a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link text-white " href="{% url 'daily' %}">
+                    <span class="sidenav-mini-icon"> D </span>
+                    <span class="sidenav-normal  ms-2  ps-1"> Dialy </span>
+                    </a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link text-white " href="{% url 'monthly' %}">
+                    <span class="sidenav-mini-icon"> M </span>
+                    <span class="sidenav-normal  ms-2  ps-1"> Monthly </span>
+                    </a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link text-white " href="{% url 'yearly' %}">
+                    <span class="sidenav-mini-icon"> Y </span>
+                    <span class="sidenav-normal  ms-2  ps-1"> Yearly </span>
+                    </a>
+                    </li>
+                  </ul>
+                  </div>
+                  </li>
+                <!-- #################Billing################## -->
+
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#basicExamples" class="nav-link text-white" aria-controls="basicExamples" role="button" aria-expanded="true">
+          <i class="material-icons-round {% if page.brand == 'RTL' %}ms-2{% else %} me-2{% endif %}">upcoming</i>
+          <span class="nav-link-text ms-2 ps-1">Billing</span>
+          </a>
+          <div class="collapse" id="basicExamples" >
+          <ul class="nav ">
+            <li class="nav-item ">
+              <a class="nav-link text-white " href="{% url 'invantory' %}">
+              <span class="sidenav-mini-icon"> I </span>
+              <span class="sidenav-normal  ms-2  ps-1"> Invantory </span>
+              </a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link text-white " href="{% url 'seller' %}">
+              <span class="sidenav-mini-icon"> B </span>
+              <span class="sidenav-normal  ms-2  ps-1"> Bill </span>
+              </a>
+            </li>
+          </ul>
+          </div>
+          </li>
+        <!-- ################################################################## -->
+        <!-- #######################Authentication################################# 
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#authExamples" class="nav-link text-white collapsed" aria-controls="authExamples" role="button" aria-expanded="false">
+          <i class="material-icons-round {% if page.brand == 'RTL' %}ms-2{% else %} me-2{% endif %}">content_paste</i>
+          <span class="nav-link-text ms-2 ps-1">Authentication</span>
+          </a>
+          <div class="collapse" id="authExamples" style="">
+          <ul class="nav ">
+          <li class="nav-item ">
+          <a class="nav-link text-white " data-bs-toggle="collapse" aria-expanded="false" href="#signinExample">
+          <span class="sidenav-mini-icon"> S </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Sign In <b class="caret"></b></span>
+          </a>
+          <div class="collapse " id="signinExample">
+          <ul class="nav nav-sm flex-column">
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/signin/basic.html">
+          <span class="sidenav-mini-icon"> B </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Basic </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/signin/cover.html">
+          <span class="sidenav-mini-icon"> C </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Cover </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/signin/illustration.html">
+          <span class="sidenav-mini-icon"> I </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Illustration </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " data-bs-toggle="collapse" aria-expanded="false" href="#signupExample">
+          <span class="sidenav-mini-icon"> S </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Sign Up <b class="caret"></b></span>
+          </a>
+          <div class="collapse " id="signupExample">
+          <ul class="nav nav-sm flex-column">
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/signup/basic.html">
+          <span class="sidenav-mini-icon"> B </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Basic </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/signup/cover.html">
+          <span class="sidenav-mini-icon"> C </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Cover </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/signup/illustration.html">
+          <span class="sidenav-mini-icon"> I </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Illustration </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " data-bs-toggle="collapse" aria-expanded="false" href="#resetExample">
+          <span class="sidenav-mini-icon"> R </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Reset Password <b class="caret"></b></span>
+          </a>
+          <div class="collapse " id="resetExample">
+          <ul class="nav nav-sm flex-column">
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/reset/basic.html">
+          <span class="sidenav-mini-icon"> B </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Basic </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/reset/cover.html">
+          <span class="sidenav-mini-icon"> C </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Cover </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/reset/illustration.html">
+          <span class="sidenav-mini-icon"> I </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Illustration </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " data-bs-toggle="collapse" aria-expanded="false" href="#lockExample">
+          <span class="sidenav-mini-icon"> L </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Lock <b class="caret"></b></span>
+          </a>
+          <div class="collapse " id="lockExample">
+          <ul class="nav nav-sm flex-column">
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/lock/basic.html">
+          <span class="sidenav-mini-icon"> B </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Basic </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/lock/cover.html">
+          <span class="sidenav-mini-icon"> C </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Cover </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/lock/illustration.html">
+          <span class="sidenav-mini-icon"> I </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Illustration </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " data-bs-toggle="collapse" aria-expanded="false" href="#StepExample">
+          <span class="sidenav-mini-icon"> 2 </span>
+          <span class="sidenav-normal  ms-2  ps-1"> 2-Step Verification <b class="caret"></b></span>
+          </a>
+          <div class="collapse " id="StepExample">
+          <ul class="nav nav-sm flex-column">
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/verification/basic.html">
+          <span class="sidenav-mini-icon"> B </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Basic </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/verification/cover.html">
+          <span class="sidenav-mini-icon"> C </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Cover </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/verification/illustration.html">
+          <span class="sidenav-mini-icon"> I </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Illustration </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+          <li class="nav-item ">
+          <a class="nav-link text-white " data-bs-toggle="collapse" aria-expanded="false" href="#errorExample">
+          <span class="sidenav-mini-icon"> E </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Error <b class="caret"></b></span>
+          </a>
+          <div class="collapse " id="errorExample">
+          <ul class="nav nav-sm flex-column">
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/error/404.html">
+          <span class="sidenav-mini-icon"> E </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Error 404 </span>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link text-white " href="../../pages/authentication/error/500.html">
+          <span class="sidenav-mini-icon"> E </span>
+          <span class="sidenav-normal  ms-2  ps-1"> Error 500 </span>
+          </a>
+          </li>
+          </ul>
+          </div>
+          </li>
+          </ul>
+          </div>
+          </li>
+         #######################search############################ -->
+
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'search' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">view_in_ar</i>
+            </div>
+            <span class="nav-link-text ms-1">Search</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'rtl' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+            </div>
+            <span class="nav-link-text ms-1">RTL</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white " href="#">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">notifications</i>
+            </div>
+            <span class="nav-link-text ms-1">Notifications</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'search' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">view_in_ar</i>
+            </div>
+            <span class="nav-link-text ms-1">Search</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'seller' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">view_in_ar</i>
+            </div>
+            <span class="nav-link-text ms-1">Sell</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+  </aside>
+  
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <form action="{% url 'products' %}">
+  <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+    <div class="container-fluid py-1 px-3">
+      
+      <!-- breadcrumb -->
+<!--      
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+          {% if '/' in request.path %}
+          <li class="breadcrumb-item text-sm text-dark " aria-current="page"><a href="{% url 'dashboard' %}">Dashboard</a> </li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">dashboard</h6>
+        {% elif 'billing' in request.path  %}
+        <li class="breadcrumb-item text-sm text-dark " aria-current="page">Bills</li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">billing</h6>
+
+        {% elif 'classes' in request.path  %}
+        <li class="breadcrumb-item text-sm text-dark " aria-current="page">Products</li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">classes</h6>
+
+        {% elif 'types' in request.path  %}
+        <li class="breadcrumb-item text-sm text-dark " aria-current="page">Products</li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">types</h6>
+
+        {% elif 'products' in request.path  %}
+        <li class="breadcrumb-item text-sm text-dark " aria-current="page">Products</li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">products</h6>
+        
+        {% elif 'serach' in request.path  %}
+        <li class="breadcrumb-item text-sm text-dark " aria-current="page">Search</li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">search</h6>
+
+
+        {% else %}
+        <li class="breadcrumb-item text-sm text-dark " aria-current="page">{{request.path}}</li>
+        </ol>
+        <h6 class="font-weight-bolder mb-0">/</h6>
+       
+        {% endif %}
+      </nav> -->
+
+      <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+        {% if request.user.username == 'admin' %}
+        <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          <div class="input-group input-group-outline">
+            <label class="form-label">B OR W ...</label>
+            <input type="search" class="form-control" name="searchName">
+          </div>
+        </div>
+      
+        <ul class="navbar-nav  justify-content-end">
+
+          
+
+          <li class="nav-item d-flex align-items-center">
+            <a class="btn btn-outline-primary btn-sm mb-0 me-3"  href="{% url 'addProduct' %}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+              </svg>
+              Add
+            </a>
+          </li>
+      
+          {% endif %}
+          <li class="mt-2">
+            <a class="github-button" href="#" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub"></a>
+          </li>
+          
+          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+              <div class="sidenav-toggler-inner">
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+              </div>
+            </a>
+          </li>
+          {% if request.user.username == 'admin' %}
+          <li class="nav-item px-3 d-flex align-items-center">
+            <a href="javascript:;" class="nav-link text-body p-0">
+              <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+            </a>
+          </li>
+
+
+          <li class="nav-item dropdown pe-2 d-flex align-items-center">
+            <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-bell cursor-pointer"></i>
+              
+            </a>
+         
+            <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+              <li class="mb-2">
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="d-flex py-1">
+                    <div class="my-auto">
+                      <img src="{% static 'assets/img/team-2.jpg' %}" class="avatar avatar-sm  me-3 ">
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="text-sm font-weight-normal mb-1">
+                        <span class="font-weight-bold">New message</span> from Laur
+                      </h6>
+                      <p class="text-xs text-secondary mb-0">
+                        <i class="fa fa-clock me-1"></i>
+                        13 minutes ago
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="mb-2">
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="d-flex py-1">
+                    <div class="my-auto">
+                      <img src="{% static 'assets/img/small-logos/logo-spotify.svg' %}" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="text-sm font-weight-normal mb-1">
+                        <span class="font-weight-bold">New album</span> by Travis Scott
+                      </h6>
+                      <p class="text-xs text-secondary mb-0">
+                        <i class="fa fa-clock me-1"></i>
+                        1 day
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="d-flex py-1">
+                    <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
+                      <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>credit-card</title>
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                            <g transform="translate(1716.000000, 291.000000)">
+                              <g transform="translate(453.000000, 454.000000)">
+                                <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+                                <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+                              </g>
+                            </g>
+                          </g>
+                        </g>
+                      </svg>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="text-sm font-weight-normal mb-1">
+                        Payment successfully completed
+                      </h6>
+                      <p class="text-xs text-secondary mb-0">
+                        <i class="fa fa-clock me-1"></i>
+                        2 days
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        
+
+          {% if request.user.is_authententicated  %}
+          <li class="nav-item d-flex align-items-center">
+            <a href="{% url 'signin' %}" class="nav-link text-body font-weight-bold px-0">
+              <i class="fa fa-user me-sm-1"></i>
+              <span class="d-sm-inline d-none">Sign In</span>
+            </a>
+          </li>
+          {% else %}
+     
+          <li class="nav-item d-flex align-items-center">
+     
+              <i class="fa fa-user me-sm-1"></i>
+
+              <span class="d-sm-inline d-none"></span>
+            </a>
+
+          </li>
+
+          {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  </form>
+
+  {% comment %}
+
+  {% else %}
+  <!-- signin and signout -->
+
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+      <div class="col-12">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg blur border-radius-xl top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
+          <div class="container-fluid ps-2 pe-0">
+            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="{% url 'dashboard' %}">
+              Jewelry Dreams
+            </a>
+            <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon mt-2">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navigation">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                  <a class="nav-link d-flex align-items-center me-2 active" aria-current="page" href="{% url 'dashboard' %}">
+                    <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
+                    Dashboard
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'profile' %}">
+                    <i class="fa fa-user opacity-6 text-dark me-1"></i>
+                    Profile
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'signup' %}">
+                    <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
+                    Sign Up
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'signin' %}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Sign In
+                  </a>
+                </li>
+              </ul>
+              <ul class="navbar-nav d-lg-flex d-none">
+                <li class="nav-item d-flex align-items-center">
+                  <a class="btn btn-outline-primary btn-sm mb-0 me-2" target="_blank" href="#">Online Builder</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="btn btn-sm mb-0 me-1 bg-gradient-dark">Free download</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- End Navbar -->
+
+
+      </div>
+    </div>
+   </div>
+
+{% endcomment %}
+
+
+  {% endif %}
+  

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+{% include 'partials/_alerts.html' %}
+   <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+    <h6 class="text-white text-capitalize ps-3">Product Details -  ({{pro.shop.name}}-{{pro.shop.address}})</h6>
+
+  </div>
+<div class="my-form container p-1 my-1 rounded border border-warning">
+        <section>            
+              <div class="row p-3 " >
+                <div class="card m-3 pr-5 w-90 " >
+                    <div class="row no-gutters">
+
+                    <div class="col-md-4 pt-3">
+                            <img src="{{pro.image.url}}" class=" img-fluid rounded border mb-2 photo" id="" style="width: none;" alt="{{pro.name}}">
+                    </div>
+
+                    <div class="col-md-8">
+
+                        <div class="card-body">
+                              <h5 class="card-title" id="productName">Name: {{pro.name}}</h5>
+                              <hr style="height:2px;border-width:0;color:gray;background-color:gray ">
+                              <p class="card-text">
+                                  Current Price: <span id="price" class="bg-dark text-light rounded-circle p-2">{{pro.classes.price}}$</span>&nbsp
+                                  Karat: <span id="className" class="bg-dark text-light rounded-circle p-2">{{pro.classes.name}}</span>&nbsp
+                                  Weight: <span id="weight" class="bg-dark text-light rounded-circle p-2">{{pro.weight}}</span>&nbsp
+                              </p>
+                              <hr  style="height:2px;border-width:0;color:gray;background-color:gray ">
+                              <p class="card-text"> 
+                                  Creation Date: <span id="creationTime" class="bg-dark text-light rounded-circle p-2">{{pro.creation_time}}</span>
+                              </p>
+                              <hr  style="height:2px;border-width:0;color:gray;background-color:gray ">
+
+                              <p class="card-text"> 
+                                  State: <span id="state" class="bg-dark text-light rounded-circle p-2">{{pro.status.name}}</span>
+                              </p>
+                              <hr style="height:2px;border-width:0;color:gray;background-color:gray ">
+
+                              <p class="card-text"> 
+                                  Description : {{pro.description|slice:':35'}}...
+                              </p>
+                              <hr style="height:2px;border-width:0;color:gray;background-color:gray ">
+
+
+                              <div class=" form-floating is-invalid  mb-3">
+                                {% if request.user.username == 'admin' %}
+                              <button type="button" class="btn btn-warning  bg-secondary m-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                  <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                                  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                              </button>
+                              
+                                <a href="{% url 'update_product' pro_id=pro.id %}" class="btn btn-warning  bg-secondary float-right m-1"><i class="fas fa-pen fa-xs"> </i> Edit</a>
+                              {% else %}
+                                No Edit
+                              {% endif %}
+                              </div>
+                              </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </section>
+</div>
+
+{% endblock %}
+
+
+<!-- Scrollable modal -->
+           <div class="modal-body">
+
+          
+            <div class=" form-floating is-invalid border mb-3">
+                <input type="text" class="form-control" name="inputBarcode" id="inputBarcode" value="{{pro.barcode}}" placeholder="">
+                <label for="floatingInput">BarCode</label>
+                <input type="hidden" name="pro_id" value="{{pro.id}}">
+            </div>
+
+            <div class=" form-floating is-invalid border mb-3">
+                <input type="text" class="form-control" name="inputName" id="inputName" value="{{pro.name}}" placeholder="">
+                <label for="floatingInput">Name</label>
+                
+            </div>
+
+            <div class=" form-floating is-invalid border mb-3">
+                <input type="text" class="form-control" name="inputWeight" id="inputWeight" value="{{pro.weight}}" placeholder="">
+                <label for="floatingInput">Weight</label>
+              </div>
+
+            <div class="form-floating border mb-3">
+                <select name="inputClasses" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                  <option  selected>{{pro.classes.name}}</option>
+                  {% for class in classes %}
+                  <option  value='{{forloop.counter}}'>{{class.name}}</option>
+                  {% endfor %}
+                </select>
+                <label for="floatingSelect">Classes</label>
+            </div>
+
+            <div class="form-floating border mb-3">
+                <select class="form-select" name="inputTypes" id="floatingSelect" aria-label="Floating label select example">
+                  <option selected>{{pro.types.name}}</option>
+                  {% for type in types %}
+                  <option  value='{{forloop.counter}}'>{{type.name}}</option>
+                  {% endfor %}
+                </select>
+                <label for="floatingSelect">Types</label>
+            </div>
+
+            <div class="border mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea class="form-control" name="inputDescription" id="exampleFormControlTextarea1" rows="5" >{{pro.description}}</textarea>
+              </div>
+
+            <div class="form-check form-switch d-flex align-items-center mb-3">
+                <input class="form-check-input" type="checkbox" id="rememberMe" >
+                <label class="form-check-label mb-0 ms-3" for="rememberMe">Bist du sicher?</label>
+            </div>
+
+        
+      </div>

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_alerts.html' %}
+      <div class="row">
+        {% for ls in list %}
+        {% with tuple_at_index=ls %}
+       
+            
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-3 pt-2">
+                {% if tuple_at_index.0.name == '24' %}
+                <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                {% else %}
+                <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                {% endif %}
+                <i class="material-icons opacity-10">weekend</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">{{ tuple_at_index.0.name }} kart </p>
+                <h4 class="mb-0"><a href="{% url 'show_number_sold' class_=tuple_at_index.0.name %}">{{tuple_at_index.2}} {{tuple_at_index.3}} </a>
+                  <p class="text-sm mb-0 text-capitalize"></p>
+                </h4>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <!-- number of pieces -->
+              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>Number: {{tuple_at_index.1}}</p>
+            </div>
+          </div>
+        </div>
+        <br>
+        {% endwith %}
+
+        
+        {% empty %}
+            No Gold>>>>
+        {% endfor %}
+        
+    
+
+      </div> 
+
+     
+
+
+      
+      
+{% endblock %}
+

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_alerts.html' %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Products table -  ({{products.count}})
+            </h6>
+          </div>
+
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0 table-hover">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"># product</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Karat</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Weight</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Employee</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Shop</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Creation</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Control</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pro in products %}
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div>
+                        <span class="text-xs font-weight-bold mb-0">{{forloop.counter}}-</span>
+                        <a href="{% url 'product' pro_id=pro.id %}">
+                        <img src="{{pro.image.url}}" class="avatar avatar-sm me-3 border-radius-lg photo_pros" alt="{{pro.name}}">
+                      </a>
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <a href="{% url 'product' pro_id=pro.id %}">
+                        <h6 class="mb-0 text-sm">{{pro.name}}</h6>
+                        </a>
+                        <p class="text-xs text-secondary mb-0">{{pro.barcode}}</p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0"><h6>{{pro.classes.name}}</h6></p>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{pro.types.name}}</p>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0"><h6>{{pro.weight}} G</h6></p>
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{pro.user.username}}</p>
+                    <p class="text-xs text-secondary mb-0">Organization</p>
+                  </td>
+
+                  <td class="align-middle text-center text-sm">
+                        {% if pro.status.name == 'available' %}
+                        <span class="badge badge-sm bg-gradient-success">{{pro.status.name}}</span>
+                        {% elif  pro.status.name == 'sold' %}
+                        <span class="badge badge-sm bg-gradient-secondary">{{pro.status.name}}</span>
+                        {% elif pro.status.name == 'block' %}
+                        <span class="badge badge-sm bg-gradient-danger">{{pro.status.name}}</span>
+                        {% elif pro.status.name == 'suspend' %}
+                        <span class="badge badge-sm bg-gradient-warning">{{pro.status.name}}</span>
+                        {% else %}
+                        <span class="badge badge-sm bg-gradient-info">{{pro.status.name}}</span
+                        {% endif %}
+                  </td>
+
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{pro.shop.name}}</p>
+                    <p class="text-xs text-secondary mb-0">{{pro.shop.address}}</p>
+                  </td>
+                  
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">{{pro.creation_time|date:'d-m-Y'}}</span>
+                  </td>
+
+                  <td class="align-middle text-center">
+                    <a href="{% url 'delete' pro_id=pro.id %}" type="button" class="btn btn-outline-primary btn-sm" >
+                        Remove
+                        </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td class="align-middle text-center">
+                 <h4>No products yet...</h4>
+                  </td>
+                </tr>
+                
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+
+
+{% endblock %}

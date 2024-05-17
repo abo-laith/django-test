@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_alerts.html' %}
+{% load capitalize_first %}
+<button type="button" class="btn bg-gradient-primary"   data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+    </svg> Add
+</button>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 ">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3  ">
+            <h6 class="text-white text-capitalize ps-3 ">Class  -  ({{classes.count}})
+              
+            </h6>
+          </div>
+
+<!-- ############################################################################################## -->
+
+<table class="table align-items-center mb-0 table-hover">
+  <thead>
+    <tr>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" ># Class</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" >Price</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" >Change</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Control</th>
+    </tr>
+  </thead>
+  <tbody>
+      
+    {% for cl in classes %}
+    <tr>
+      <td>
+        <div class="d-flex px-2 py-1">
+          <div>
+            <span class="text-xs font-weight-bold mb-0">{{forloop.counter}}-</span>
+          </div>
+          <div class="d-flex flex-column justify-content-center">
+            <a href="#">
+            <h6 class="mb-0 text-sm">{{cl.name|capitalize_first}}</h6>
+            </a>
+          </div>
+          <td>
+          <div class="d-flex flex-column justify-content-center">
+            <h6 class="text-xs text-secondary mb-0">{{cl.price}} $</h6>
+          </div>
+            </td>
+            <td>
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="text-xs text-secondary mb-0">{{cl.price}} $</h6>
+              </div>
+                </td>
+          <td style="font-weight: bold;color:darkred">
+            <button class="clickable-button btn btn-outline-primary btn-sm"
+            data-bs-toggle="modal" data-bs-target="#modal-notification"
+            onclick="updateModal('{{cl.id}}')">remove
+            </button>
+           
+            </td>
+        </div>
+      </td>
+     
+    </tr>
+    {% empty %}
+    <tr>
+      <td class="align-middle text-center">
+     <h4>No Types yet...</h4>
+      </td>
+    </tr>
+
+    
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<!-- ############################################################################################### -->
+
+
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- model Notification -->
+<div class="row">
+  <div class="col-md-4">
+      <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h6 class="modal-title font-weight-normal" id="modal-title-notification">Your attention is required</h6>
+              <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="py-3 text-center">
+                <i class="material-icons h1 text-secondary">
+                  Be Carefull
+                </i>
+                <h4 class="text-gradient text-danger mt-4">Before Delete Class!</h4>
+                <p>If you want to delete Class, you must delete all products that assosiated with it.</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button> 
+              <a id="selectediteminfo" href="/products/classes/remove/" type="button" class="btn bg-gradient-primary" >
+                  Remove
+                  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- model add -->
+<form method="post" action="{% url 'addClass' %}" id="formaddto">
+  {% csrf_token %}
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-normal" fs-5 id="exampleModalLabel">Add class {{btnmodel}}</h5>
+        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+          <div class="input-group input-group-lg input-group-outline my-3">
+              <label class="form-label">Class</label>
+              <input type="text" name="inputClass" value="" id="inputclass"  class="form-control form-control-lg" required>
+          </div>
+          <div class="input-group input-group-lg input-group-outline my-3">
+            <label class="form-label">Price</label>
+            <input type="number" name="inputPrice" value="" id="inputprice"  class="form-control form-control-lg" step=".01" min="0" max="1000" required>
+        </div>
+        <div class="input-group input-group-lg input-group-outline my-3">
+          <label class="form-label">Change</label>
+          <input type="number" name="inputChange" value="" id="inputChange"  class="form-control form-control-lg" step=".01" min="0" max="1000" required>
+      </div>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button> 
+        <button  onclick="addToClass()" class="btn bg-gradient-primary">Save changes</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</form>
+
+
+<script>
+  var selectedItemInfo=document.getElementById('selectediteminfo');
+   
+function updateModal(itemId){
+
+  var myUrl='{% url "remove_from_type" removetype_id=22 %}';
+  var myUrl_1='{% url "remove_from_type" removetype_id=';
+
+  var test=myUrl_1.concat(itemId,' %}');
+
+  //selectedItemInfo.textContent=myUrl;
+  var temp= "classes/remove/"+itemId
+  selectedItemInfo.href+=itemId
+  console.log(selectedItemInfo.href);
+  console.log(itemId)   
+
+}
+  
+</script>
+
+{% endblock %}

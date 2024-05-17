@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_alerts.html' %}
+<div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+  <h6 class="text-white text-capitalize ps-3">update product - ({{pro.shop.name}}-{{pro.shop.address}})</h6>
+
+</div>
+<legend class="text-center pb-1 mb-3"></legend> 
+
+<div class="my-form container p-1 my-1 rounded border border-warning">
+  <section>            
+        <div class="row p-3 " >
+          <div class="card m-3 pr-5 w-90 " >
+              <div class="row no-gutters">
+
+                    <div class="col-md-4 pt-3">
+                        <img src="{{pro.image.url}}" class="img-fluid rounded border mb-2 photo" style="width: none;" alt="{{pro.name}}">
+                    </div>
+
+                  <div class="col-md-8">
+
+                  <div class="card-body">
+                    <form method="post"  enctype="multipart/form-data" novalidate onkeydown="if(event.keyCode === 13) { 
+                      
+                      return false;}"> 
+                    {%csrf_token%}
+
+                        <div class=" form-floating is-invalid border mb-3">
+                            <input type="text" class="form-control" name="inputBarcode" id="inputBarcode" value="{{pro.barcode}}" placeholder="">
+                            <label for="floatingInput">BarCode</label>
+                        </div>
+                        <div class=" form-floating is-invalid border mb-3">
+                          <input type="text" class="form-control" name="inputName" id="inputName" value="{{pro.name}}" placeholder="">
+                          <label for="floatingInput">Name</label>
+                        </div>
+                        <div class=" form-floating is-invalid border mb-3">
+                          <input type="number" class="form-control" name="inputWeight" id="inputWeight" value="{{pro.weight}}" placeholder="">
+                          <label for="floatingInput">Weight</label>
+                        </div>
+                        <div class="form-floating border mb-3">
+                          <select name="inputClasses" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                            <option  selected>{{pro.classes.name}}</option>
+                            {% for class in classes %}
+                            <option  value='{{class.name}}'>{{class.name}}</option>
+                            {% endfor %}
+                          </select>
+                          <label for="floatingSelect">Classes</label>
+                      </div>
+
+                      <div class="form-floating border mb-3">
+                        <select class="form-select" name="inputTypes" id="floatingSelect" aria-label="Floating label select example">
+                          <option selected>{{pro.types.name}}</option>
+                          {% for type in types %}
+                          <option  value='{{type.name}}'>{{type.name}}</option>
+                          {% endfor %}
+                        </select>
+                        <label for="floatingSelect">Types</label>
+                      </div>
+
+                      <div class="form-floating border mb-3">
+                        <select class="form-select" name="inputStatus" id="floatingSelect" aria-label="Floating label select example">
+                          <option selected>{{pro.status.name}}</option>
+                          {% for stat in status %}
+                          <option   value='{{stat.name}}'>{{stat.name}}</option>
+                          {% endfor %}
+                        </select>
+                        <label for="floatingSelect">Status</label>
+                      </div>
+
+                      <div class="form-floating border mb-3">
+                        <select class="form-select" name="inputShops" id="floatingSelect" aria-label="Floating label select example">
+                          <option selected>{{pro.shop.name}}-{{pro.shop.address}}</option>
+                          {% for shop in shops %}
+                          <option  value='{{shop.name}}-{{shop.address}}'>{{shop.name}}-{{shop.address}}</option>
+                          {% endfor %}
+                        </select>
+                        <label for="floatingSelect">Shops</label>
+                      </div>
+
+                
+                      <div class=" form-floating is-invalid border mb-3 mt-2">
+                        <input type="number" class="form-control" name="inputSize" id="inputSize" value="{{pro.size}}" placeholder="">
+                        <label for="floatingInput">Size</label>
+                    </div>
+                      <div class="border mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <textarea class="form-control" name="inputDescription" id="exampleFormControlTextarea1" rows="5" >{{pro.description}}</textarea>
+                      </div>
+                       
+                       <div class="form-check form-switch d-flex align-items-center mb-3">
+                        {{product_form}}
+
+                       </div>
+
+                      <div class="pretty p-svg p-curve p-jelly">
+                       
+
+                        <input type="checkbox" name="terms" id="inputRadio" />
+                        <div class="state p-warning">
+                            <!-- svg path -->
+                            <svg class="svg svg-icon" viewBox="0 0 20 20">
+                                <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+                            </svg>
+                            <label>Bist du sicher?</label>
+                        </div>
+                    </div>
+
+                  
+                       <div class="form-check form-switch d-flex align-items-center mb-3">
+                        <input class="btn btn-secondary mb-4 mt-4" name="btnOk" type="submit" value="OK">
+                       </div>
+                        
+                    </form>
+
+                    </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+  </section>
+</div>
+<script>
+  $(document).ready(function() {
+    $(window).keydown(function(event){
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+    });
+  });
+</script>
+
+{% endblock %}
